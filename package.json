@@ -1,0 +1,29 @@
+{
+  "name": "translate",
+  "version": "1.0.0",
+  "description": "A french - english and english - french word translator game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc ./src/index.ts",
+    "start": "source .env.sh && node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opeyemi33171/translate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/opeyemi33171/translate/issues"
+  },
+  "homepage": "https://github.com/opeyemi33171/translate#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.1"
+  }
+}
