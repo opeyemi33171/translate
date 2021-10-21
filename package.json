@@ -7,6 +7,9 @@
     "node": "16.x"
   },
   "scripts": {
+    "tsc":"./node_modules/typescript/bin/tsc",
+    "build":"tsc",
+    "postinstall":"npm run build",
     "start": " tsc ./index.ts && node ./index.js"
   },
   "repository": {
