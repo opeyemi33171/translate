@@ -10,7 +10,7 @@
   "scripts": {
     "tsc": "./node_modules/typescript/bin/tsc",
     "postinstall": "tsc",
-    "start": "./build/index.js"
+    "start": "tsc && node ./build/index.js"
   },
   "repository": {
     "type": "git",
