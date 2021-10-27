@@ -4,7 +4,8 @@
   "description": "A french - english and english - french word translator game",
   "main": "index.js",
   "engines": {
-    "node": "16.x"
+    "node": "16.x",
+    "npm":"7.x"
   },
   "scripts": {
     "tsc":"./node_modules/typescript/bin/tsc",
