@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node ./build/index.js",
-    "build": "tsc",
+    "build": "./node_modules/typescript/bin/tsc",
     "postinstall": "npm run build"
   },
   "repository": {
