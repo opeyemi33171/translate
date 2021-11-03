@@ -8,9 +8,9 @@
     "npm": "7.x"
   },
   "scripts": {
-    "tsc": "./node_modules/typescript/bin/tsc",
-    "postinstall": "tsc",
-    "start": "tsc && node ./build/index.js"
+    "start": "node ./build/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
