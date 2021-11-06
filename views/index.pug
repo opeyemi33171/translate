@@ -1,0 +1,19 @@
+html 
+    head
+        title translate
+    
+    body
+        h1= message
+
+        form(action="/new-word", method="post")
+            label(for="english-word") English Word
+            br
+            input(type="text", name="english")
+            br
+            br
+            label(for="french-word") French Word
+            br
+            input(type="text", name="french")
+            br
+            br
+            button(type="submit") Submit Word
