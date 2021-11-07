@@ -1,7 +1,14 @@
 import express from "express";
 import path from "path";
 import { Word } from './word';
-import  bodyParser from 'body-parser';
+import {Client} from "pg";
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 
 let app = express();
 
@@ -19,6 +26,15 @@ app.get("/", (req: any, res: any) => {
 
 app.post('/new-word', (req: any, res: any) =>{
     wordMap.push(req.body);
+    client.connect((err: Error) =>{
+        console.log("CONNECTION_ERROR");
+        console.log(err);
+    });
+    client.query(`CREATE TABLE Word(id INT NOT NULL AUTO_INCREMENT, english VARCHAR(255), french VARCHAR(255), PRIMARY KEY(id))`, (err, res)=>{
+        if(err)throw err;
+        console.log(res);
+    });
+    client.end();
     res.send("New word added");
 });
 
@@ -28,7 +44,7 @@ app.listen(process.env.PORT || 2000, () => {
 
 app.get('/words', (req, res) => {
     console.log(wordMap);
-    
+
     res.render("list", {
         message:"List Of Words",
         wordObject: wordMap
