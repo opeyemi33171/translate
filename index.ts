@@ -10,6 +10,10 @@ const client = new Client({
     }
 });
 
+function buildWordInserQuery(id: number, engWord: string, frenWord: string) {
+    return `INSERT INTO word (id, english, french) VALUES (${id}, ${engWord}, ${frenWord});`;
+}
+
 let app = express();
 
 app.set("view engine", "pug");
@@ -18,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 let wordMap : Word[] = [];
 
+
 app.get("/", (req: any, res: any) => {
     res.render("index", {
         message: "Welcome To Translate"
@@ -25,16 +30,22 @@ app.get("/", (req: any, res: any) => {
 });
 
 app.post('/new-word', (req: any, res: any) =>{
-    wordMap.push(req.body);
-    client.connect((err: Error) =>{
-        console.log("CONNECTION_ERROR");
-        console.log(err);
+    const wordItem = req.body;
+
+    client.connect((err: Error) => {
+        throw Error(`error connecting to database: ${err}`);
     });
-    client.query(`CREATE TABLE Word(id INT NOT NULL AUTO_INCREMENT, english VARCHAR(255), french VARCHAR(255), PRIMARY KEY(id))`, (err, res)=>{
-        if(err)throw err;
-        console.log(res);
+
+
+    const wordInsertQuery = buildWordInserQuery(2, wordItem.english, wordItem.french);
+
+    client.query(wordInsertQuery, (err, res) => {
+        if(err){
+            throw Error(`error querying database: ${err}`);
+        } 
+        client.end();
     });
-    client.end();
+
     res.send("New word added");
 });
 
