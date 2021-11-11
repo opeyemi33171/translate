@@ -10,8 +10,14 @@ const client = new Client({
     }
 });
 
+client.connect((err: Error) => {
+    if(err){
+        throw new Error(`error connecting to database: ${err}`);
+    }
+});
+
 function buildWordInserQuery(id: number, engWord: string, frenWord: string) {
-    return `INSERT INTO word (id, english, french) VALUES (${id}, ${engWord}, ${frenWord});`;
+    return `INSERT INTO word (id, english, french) VALUES (${id}, '${engWord}', '${frenWord}');`;
 }
 
 let app = express();
@@ -32,16 +38,11 @@ app.get("/", (req: any, res: any) => {
 app.post('/new-word', (req: any, res: any) =>{
     const wordItem = req.body;
 
-    client.connect((err: Error) => {
-        throw Error(`error connecting to database: ${err}`);
-    });
-
-
     const wordInsertQuery = buildWordInserQuery(2, wordItem.english, wordItem.french);
 
     client.query(wordInsertQuery, (err, res) => {
         if(err){
-            throw Error(`error querying database: ${err}`);
+            throw new Error(`error querying database: ${err}`);
         } 
         client.end();
     });
