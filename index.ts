@@ -16,8 +16,8 @@ client.connect((err: Error) => {
     }
 });
 
-function buildWordInserQuery(id: number, engWord: string, frenWord: string) {
-    return `INSERT INTO word (id, english, french) VALUES (${id}, '${engWord}', '${frenWord}');`;
+function buildWordInserQuery(engWord: string, frenWord: string) {
+    return `INSERT INTO word (english, french) VALUES ('${engWord}', '${frenWord}');`;
 }
 
 let app = express();
@@ -38,7 +38,7 @@ app.get("/", (req: any, res: any) => {
 app.post('/new-word', (req: any, res: any) =>{
     const wordItem = req.body;
 
-    const wordInsertQuery = buildWordInserQuery(2, wordItem.english, wordItem.french);
+    const wordInsertQuery = buildWordInserQuery(wordItem.english, wordItem.french);
 
     client.query(wordInsertQuery, (err, res) => {
         if(err){
