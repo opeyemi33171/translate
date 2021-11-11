@@ -10,12 +10,6 @@ const client = new Client({
     }
 });
 
-client.connect((err: Error) => {
-    if(err){
-        throw new Error(`error connecting to database: ${err}`);
-    }
-});
-
 function buildWordInserQuery(engWord: string, frenWord: string) {
     return `INSERT INTO word (english, french) VALUES ('${engWord}', '${frenWord}');`;
 }
@@ -27,6 +21,12 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 
 let wordMap : Word[] = [];
+
+client.connect((err: Error) => {
+    if(err){
+        throw new Error(`error connecting to database: ${err}`);
+    }
+});
 
 
 app.get("/", (req: any, res: any) => {
@@ -44,11 +44,15 @@ app.post('/new-word', (req: any, res: any) =>{
         if(err){
             throw new Error(`error querying database: ${err}`);
         } 
-        client.end();
     });
 
     res.send("New word added");
 });
+
+app.get('/close', (req, res) => {
+    client.end();
+    res.send("db closed");
+})
 
 app.listen(process.env.PORT || 2000, () => {
     console.log(`listening at port: 2000`);
