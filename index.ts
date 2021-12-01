@@ -20,6 +20,12 @@ app.get("/", (req: any, res: any) => {
     });
 });
 
+app.get("/new-word", (req, res) => { 
+    res.render("index", {
+        message: "Add New Word"
+    });
+});
+
 app.post('/new-word', (req: any, res: any) =>{
     const client = new Client({
         connectionString: process.env.DATABASE_URL,
