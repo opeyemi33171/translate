@@ -3,13 +3,6 @@ import path from "path";
 import { Word } from './word';
 import {Client} from "pg";
 
-const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
-
 function buildWordInserQuery(engWord: string, frenWord: string) {
     return `INSERT INTO word (english, french) VALUES ('${engWord}', '${frenWord}');`;
 }
@@ -20,14 +13,6 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 
-let wordMap : Word[] = [];
-
-client.connect((err: Error) => {
-    if(err){
-        throw new Error(`error connecting to database: ${err}`);
-    }
-});
-
 
 app.get("/", (req: any, res: any) => {
     res.render("index", {
@@ -36,6 +21,19 @@ app.get("/", (req: any, res: any) => {
 });
 
 app.post('/new-word', (req: any, res: any) =>{
+    const client = new Client({
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    });
+
+    client.connect((err: Error) => {
+        if(err){
+            throw new Error(`error connecting to database: ${err}`);
+        }
+    });
+
     const wordItem = req.body;
 
     const wordInsertQuery = buildWordInserQuery(wordItem.english, wordItem.french);
@@ -46,17 +44,23 @@ app.post('/new-word', (req: any, res: any) =>{
         } 
     });
 
-    res.send("New word added");
+    client.end();
+
+    res.render("index", {
+        message: "New Word Added"
+    });
 });
 
 app.get('/close', (req, res) => {
-    client.end();
+    //client.end();
     res.send("db closed");
 })
 
 app.listen(process.env.PORT || 2000, () => {
     console.log(`listening at port: 2000`);
 });
+
+let wordMap : Word[] = [];
 
 app.get('/words', (req, res) => {
     console.log(wordMap);
